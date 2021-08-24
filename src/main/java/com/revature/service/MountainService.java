@@ -4,20 +4,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.model.Mountain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class MountainService {
+    private static final Logger logger = LoggerFactory.getLogger(ClimberService.class);
 
     private ObjectMapper mapper;
+    private Mountain mountainQuery;
 
-    public MountainService() {
-        mapper = new ObjectMapper();
+    public MountainService(ObjectMapper mapper, Mountain mountainQuery) {
+
+
+        this.mapper = mapper;
+        this. mountainQuery = mountainQuery;
     }
 
     public void getMountains(HttpServletRequest req, HttpServletResponse resp) {
-        Mountain mtnQuery = (Mountain) new Mountain().query();
+
+        String ipAddress = req.getHeader("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = req.getRemoteAddr();
+        }
+        logger.info(String.format("getMountains - %s", ipAddress));
+
+
+        Mountain mtnQuery = (Mountain) mountainQuery.query();
         // run through valid params and attach to query
         if (req.getParameter("min") != null) {
             int min = Integer.parseInt(req.getParameter("min"));
@@ -39,12 +54,9 @@ public class MountainService {
         List<Object> mountains = mtnQuery.all();
 
         try {
-            resp.setContentType("json; charset=UTF-8");
-            resp.setCharacterEncoding("UTF-8");
-            String json = mapper
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(mountains);
-            resp.getWriter().print(json);
+            String json = mapper.writeValueAsString(mountains);
+            resp.getOutputStream().print(json);
+            resp.setStatus(HttpServletResponse.SC_OK);
         } catch (IOException e) {
             e.printStackTrace();
         }

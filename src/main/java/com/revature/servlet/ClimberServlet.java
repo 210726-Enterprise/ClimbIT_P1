@@ -1,20 +1,18 @@
 package com.revature.servlet;
 
 import com.revature.service.ClimberService;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/api/climbers")
 public class ClimberServlet extends HttpServlet {
 
     ClimberService service;
 
-    public ClimberServlet() {
-        this.service = new ClimberService();
+    public ClimberServlet(ClimberService service) {
+        this.service = service;
     }
 
     @Override
@@ -25,7 +23,6 @@ public class ClimberServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         service.insertClimber(req, resp);
-        // should return the id or the whole object in json
     }
 
     @Override
