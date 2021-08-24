@@ -1,6 +1,6 @@
-# ⛰️ ClimbIT - a simple api 
+# ⛰️ ClimbIT - a simple api
 
-__This api leverages MrORM__
+__This api leverages [MrORM](https://github.com/210726-Enterprise/MrORM_P1/tree/master)__
 
 __Docker image:__
 
@@ -24,7 +24,7 @@ __request body to POST to /api/climbers:__
 __gives response:__
 
 ```
-{ 
+{
   "id": 1234,
   "first": "Katie",
   "last": "Martinez"
