@@ -40,6 +40,6 @@ api/climbers?climberId=1234
 __gives response:__
 ```json
 {
-"message": "climber 19 successfully removed"
+"message": "climber 1234 successfully removed"
 }
 ```
